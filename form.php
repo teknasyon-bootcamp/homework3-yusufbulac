@@ -28,7 +28,7 @@
 
 class Form
 {
-    public array $fields;
+    public array $fields = [];
 
     private function __construct(string $action, string $method)
     {
@@ -52,9 +52,14 @@ class Form
         return new self($action, $method);
     }
 
-    public function addField(string $label, string $name, ?int $defaultValue = null): void
+    public function addField(string $name, string $label,  ?string $defaultValue = null): void
     {
-        $this->fields = [$label, $name, $defaultValue];
+        $field = [
+            "name" => $name,
+            "label" => $label,
+            "defaultValue" => $defaultValue
+        ];
+        $this->fields[] = $field;
     }
 
     public function setMethod(string $method): void
@@ -68,12 +73,15 @@ class Form
         <form method='<?= $this->method ?>' action='<?= $this->action ?>'>
 
             <?php
+
             foreach ($this->fields as $field) {
+
             ?>
-                <label for='<?= $field ?>'>Surname</label>
-                <input type='text' name='<?= $field ?>' value='' />
+                <label for='<?= $field["label"] ?>'><?= $field["name"]  ?></label>
+                <input type='text' name='<?= $field["label"]  ?>' value='<?= $field["defaultValue"]  ?>' />
             <?php
             }
+
             ?>
             <button type='submit'>Gönder</button>
         </form>
